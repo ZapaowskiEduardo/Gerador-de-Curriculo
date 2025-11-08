@@ -9,17 +9,20 @@
 </head>
 <body>
   <div class="container">
-    <h1>Gerador de Currículo </h1>
+    <h1>Gerador de Currículo</h1>
     <form id="curriculoForm">
+
+
       <div class="section">
         <h2>Dados Pessoais</h2>
         <input type="text" id="nome" placeholder="Nome completo" required />
         <input type="text" id="cpf" placeholder="CPF" required />
         <input type="date" id="nascimento" onchange="calcularIdade()" required />
-        <input type="text" id="idade" placeholder="Idade" readonly />
+        <input type="number" id="idade" placeholder="Idade" readonly />
         <input type="email" id="email" placeholder="Email" required />
         <input type="text" id="telefone" placeholder="Telefone" required />
         <input type="text" id="endereco" placeholder="Endereço" required />
+
       </div>
 
       <div class="section">
@@ -32,6 +35,7 @@
         <div id="experiencias"></div>
         <div class="button-group">
           <button type="button" onclick="adicionarExperiencia()">Adicionar Experiência</button>
+          
         </div>
       </div>
 
@@ -40,6 +44,7 @@
         <div id="formacoes"></div>
         <div class="button-group">
           <button type="button" onclick="adicionarFormacao()">Adicionar Formação</button>
+          
         </div>
       </div>
 
@@ -65,7 +70,8 @@
       </div>
 
       <div class="buttons">
-        <button type="button" onclick="gerarCurriculo()">Baixar Currículo em PDF</button>
+        <button type="button" onclick="gerarCurriculo()">Baixar PDF</button>
+        <button type="button" onclick="imprimirCurriculo()">Imprimir Currículo</button>
         <button type="reset">Limpar Tudo</button>
       </div>
     </form>
