@@ -1,10 +1,3 @@
-function previewFoto() {
-  const file = document.getElementById("foto").files[0];
-  const preview = document.getElementById("preview");
-  const reader = new FileReader();
-  reader.onloadend = () => preview.src = reader.result;
-  if (file) reader.readAsDataURL(file);
-}
 
 function calcularIdade() {
   const nascimento = document.getElementById("nascimento").value;
@@ -73,66 +66,38 @@ function gerarCurriculo() {
   const nivelIdioma = document.getElementById("nivelIdioma").value;
   const certificacoes = document.getElementById("certificacoes").value;
   const descricaoAdicional = document.getElementById("descricaoAdicional").value;
-  const linkedin = document.getElementById("linkedin").value;
-  const github = document.getElementById("github").value;
+
 
   let y = 20;
   doc.setFontSize(18);
   doc.setFont("Helvetica", "bold");
-  doc.text("Currículo", 70, y); y += 10;
+  doc.text("Currículo Profissional", 70, y); y += 10;
 
-  doc.setFontSize(12);
+  const addCampo = (label, valor) => {
+    if (valor) {
+      doc.setFontSize(12);
+      doc.setFont("Helvetica", "bold");
+      doc.text(`${label}:`, 10, y);
+      doc.setFont("Helvetica", "normal");
+      doc.text(valor, 40, y);
+      y += 6;
+    }
+  };
 
-  doc.setFont("Helvetica", "bold");
-  doc.text("Nome:", 10, y);
-  doc.setFont("Helvetica", "normal");
-  doc.text(nome, 40, y); y += 6;
-
-  doc.setFont("Helvetica", "bold");
-  doc.text("CPF:", 10, y);
-  doc.setFont("Helvetica", "normal");
-  doc.text(cpf, 40, y); y += 6;
-
-  doc.setFont("Helvetica", "bold");
-  doc.text("Idade:", 10, y);
-  doc.setFont("Helvetica", "normal");
-  doc.text(idade, 40, y); y += 6;
-
-  doc.setFont("Helvetica", "bold");
-  doc.text("Email:", 10, y);
-  doc.setFont("Helvetica", "normal");
-  doc.text(email, 40, y); y += 6;
-
-  doc.setFont("Helvetica", "bold");
-  doc.text("Telefone:", 10, y);
-  doc.setFont("Helvetica", "normal");
-  doc.text(telefone, 40, y); y += 6;
-
-  doc.setFont("Helvetica", "bold");
-  doc.text("Endereço:", 10, y);
-  doc.setFont("Helvetica", "normal");
-  doc.text(endereco, 40, y); y += 6;
-
-  if (linkedin) {
-    doc.setFont("Helvetica", "bold");
-    doc.text("LinkedIn:", 10, y);
-    doc.setFont("Helvetica", "normal");
-    doc.text(linkedin, 40, y); y += 6;
-  }
-
-  if (github) {
-    doc.setFont("Helvetica", "bold");
-    doc.text("GitHub:", 10, y);
-    doc.setFont("Helvetica", "normal");
-    doc.text(github, 40, y); y += 10;
-  }
+  addCampo("Nome", nome);
+  addCampo("CPF", cpf);
+  addCampo("Idade", idade);
+  addCampo("Email", email);
+  addCampo("Telefone", telefone);
+  addCampo("Endereço", endereco);
 
   doc.setFontSize(14);
   doc.setFont("Helvetica", "bold");
   doc.text("Perfil Profissional", 10, y); y += 6;
-  doc.setFontSize(12);
   doc.setFont("Helvetica", "normal");
-  doc.text(doc.splitTextToSize(perfil, 180), 10, y); y += doc.getTextDimensions(perfil).h + 5;
+  const perfilTexto = doc.splitTextToSize(perfil, 180);
+  doc.text(perfilTexto, 10, y);
+  y += perfilTexto.length * 6;
 
   doc.setFontSize(14);
   doc.setFont("Helvetica", "bold");
@@ -148,8 +113,9 @@ function gerarCurriculo() {
     doc.setFont("Helvetica", "bold");
     doc.text(`• ${cargo} - ${empresa} (${periodo})`, 10, y); y += 6;
     doc.setFont("Helvetica", "normal");
-    doc.text(doc.splitTextToSize(descricao, 180), 12, y);
-    y += doc.getTextDimensions(descricao).h + 4;
+    const descTexto = doc.splitTextToSize(descricao, 180);
+    doc.text(descTexto, 12, y);
+    y += descTexto.length * 6;
   }
 
   doc.setFontSize(14);
@@ -176,19 +142,30 @@ function gerarCurriculo() {
   doc.setFont("Helvetica", "bold");
   doc.text("Certificações", 10, y); y += 6;
   doc.setFont("Helvetica", "normal");
-  doc.text(doc.splitTextToSize(certificacoes, 180), 10, y);
-  y += doc.getTextDimensions(certificacoes).h + 5;
+  const certTexto = doc.splitTextToSize(certificacoes, 180);
+  doc.text(certTexto, 10, y);
+  y += certTexto.length * 6;
 
   if (descricaoAdicional.trim() !== "") {
     doc.setFontSize(14);
     doc.setFont("Helvetica", "bold");
     doc.text("Descrição Adicional", 10, y); y += 6;
     doc.setFont("Helvetica", "normal");
-    doc.text(doc.splitTextToSize(descricaoAdicional, 180), 10, y);
-    y += doc.getTextDimensions(descricaoAdicional).h + 5;
+    const descTexto = doc.splitTextToSize(descricaoAdicional, 180);
+    doc.text(descTexto, 10, y);
+    y += descTexto.length * 6;
   }
 
-  const blobURL = doc.output("bloburl");
+  // ✅ Baixar o PDF
+  doc.save("curriculo.pdf");
+
+  // ✅ Imprimir o PDF em nova aba
+  const blob = doc.output("blob");
+  const blobURL = URL.createObjectURL(new Blob([blob], { type: "application/pdf" }));
   const printWindow = window.open(blobURL, "_blank");
   printWindow.onload = () => printWindow.print();
+}
+
+function imprimirCurriculo() {
+  gerarCurriculo(); // já inclui salvar e imprimir
 }
